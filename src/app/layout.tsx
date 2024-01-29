@@ -2,6 +2,8 @@ import React from "react"
 import { Inter } from "next/font/google"
 
 import "./globals.css"
+import TRPCProvider from "@/app/_providers/TRPCProvider"
+import NextAuthProvider from "@/app/_providers/NextAuthProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -15,7 +17,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <html lang="en">
             <body className={inter.className}>
                 <main>
-                    { children }
+                    <TRPCProvider>
+                        <NextAuthProvider>
+                            { children }
+                        </NextAuthProvider>
+                    </TRPCProvider>
                 </main>
             </body>
         </html>
