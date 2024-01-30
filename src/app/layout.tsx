@@ -1,11 +1,15 @@
 import React from "react"
-import { Inter } from "next/font/google"
+import { Rubik } from "next/font/google"
 
 import "./globals.css"
 import TRPCProvider from "@/app/_providers/TRPCProvider"
 import NextAuthProvider from "@/app/_providers/NextAuthProvider"
+import ChakraProvider from "@/app/_providers/ChakraProvider"
 
-const inter = Inter({ subsets: ["latin"] })
+const rubik = Rubik({
+    subsets: ["latin"],
+    variable: "--font-rubik",
+})
 
 export const metadata = {
     title: "Create Next App",
@@ -15,11 +19,13 @@ export const metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={ rubik.className }>
                 <main>
                     <TRPCProvider>
                         <NextAuthProvider>
-                            { children }
+                            <ChakraProvider>
+                                { children }
+                            </ChakraProvider>
                         </NextAuthProvider>
                     </TRPCProvider>
                 </main>
