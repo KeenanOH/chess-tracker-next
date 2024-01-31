@@ -1,18 +1,10 @@
-"use client"
+import { Box, Heading } from "@chakra-ui/react"
 
-
-import Sidebar from "@/app/_components/sidebar/Sidebar"
-import { Button, useDisclosure } from "@chakra-ui/react"
-
-export default function AdminDashboard() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+export default async function AdminDashboard() {
 
     return (
-        <>
-            <Sidebar isOpen={ isOpen } onClose={ onClose }/>
-            <div>
-                <Button onClick={ onOpen }>Open</Button>
-            </div>
-        </>
+        <Box>
+            <Heading size="xl">Dashboard</Heading>
+        </Box>
     )
 }

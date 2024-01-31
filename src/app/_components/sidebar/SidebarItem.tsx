@@ -1,8 +1,11 @@
 import React from "react"
 import { Link } from "@chakra-ui/next-js"
 import { Flex, Text } from "@chakra-ui/react"
+import { usePathname } from "next/navigation"
 
-export default function SidebarItem({ icon, name, path, active }: { icon: React.ReactNode, name: string, path: string, active: boolean }) {
+export default function SidebarItem({ icon, name, path }: { icon: React.ReactNode, name: string, path: string }) {
+
+    const pathName = usePathname()
 
     return (
         <Link href={ path } _hover={{ textDecoration: "none" }} _focus={{ boxShadow: "none" }}>
@@ -12,7 +15,7 @@ export default function SidebarItem({ icon, name, path, active }: { icon: React.
                 padding="10px"
                 color="white"
                 borderRadius="6px"
-                background={ active ? "rgba(255, 255, 255, 0.10)" : "undefined" }
+                background={ pathName === path ? "rgba(255, 255, 255, 0.10)" : undefined }
                 transitionDuration="300ms"
                 cursor="pointer"
                 _hover={ { opacity: 0.75 } }

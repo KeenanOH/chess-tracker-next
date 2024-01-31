@@ -1,59 +1,69 @@
-import BrandText from "@/app/_components/typography/BrandText"
 import React from "react"
-import {
-    Box,
-    Divider,
-    Drawer, DrawerBody,
-    DrawerCloseButton,
-    DrawerContent, DrawerFooter,
-    DrawerHeader,
-    Show
-} from "@chakra-ui/react"
-import SidebarItem from "@/app/_components/sidebar/SidebarItem"
-import MdOutlineSpaceDashboardIcon from "@/app/_components/icons/MdOutlineSpaceDashboardIcon"
-import IoSchoolOutlineIcon from "@/app/_components/icons/IoSchoolOutlineIcon"
-import BsPersonIcon from "@/app/_components/icons/BsPersonIcon"
-import IoTrophyOutlineIcon from "@/app/_components/icons/IoTrophyOutlineIcon"
-import MdOutlineDashboardIcon from "@/app/_components/icons/MdOutlineDashboardIcon"
-import SidebarUserDisplay from "@/app/_components/sidebar/SidebarUserDisplay"
-import MdOutlineSettingsIcon from "@/app/_components/icons/MdOutlineSettingsIcon"
-import CkQuestionOutlineIcon from "@/app/_components/icons/CkQuestionOutlineIcon"
+import { Box, CloseButton, Flex, Hide, IconButton, Show, Slide, useDisclosure } from "@chakra-ui/react"
 
-export default function Sidebar({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+import SidebarBody from "@/app/_components/sidebar/SidebarBody"
+import SidebarFooter from "@/app/_components/sidebar/SidebarFooter"
+import SidebarHeader from "@/app/_components/sidebar/SidebarHeader"
+import { HamburgerIcon } from "@chakra-ui/icons"
+
+type SidebarChildren = [React.ReactElement<typeof SidebarHeader>, React.ReactElement<typeof SidebarBody>, React.ReactElement<typeof SidebarFooter>]
+
+function SidebarContent({ children, onClose }: { children: SidebarChildren, onClose?: () => void }) {
     return (
-        <Drawer
-            isOpen={ isOpen }
-            placement='left'
-            onClose={ onClose }
+        <Flex
+            backgroundColor="#107ECD"
+            flexDirection="column"
+            justifyContent="space-between"
+            userSelect="none"
+            width="320px"
+            height="100vh"
+            padding="32px"
+            position="sticky"
+            top="0"
         >
-            <DrawerContent backgroundColor="#107ECD" userSelect="none">
-                <DrawerHeader>
+            <Box>
+                <Flex
+                    justifyContent="space-between"
+                >
+                    { children[0] }
                     <Show below="md">
-                        <DrawerCloseButton color="white" />
+                        <CloseButton color="white" onClick={ onClose }/>
                     </Show>
-                    <BrandText />
-                </DrawerHeader>
+                </Flex>
+                { children[1] }
+            </Box>
+            { children[2] }
+        </Flex>
+    )
+}
 
-                <DrawerBody>
-                    <Divider marginBottom="12px"/>
+export default function Sidebar({ children }: { children: SidebarChildren }) {
 
-                    <SidebarItem icon={ <MdOutlineSpaceDashboardIcon /> } name="Dashboard" path="/" active={ true } />
-                    <SidebarItem icon={ <IoSchoolOutlineIcon /> } name="Schools" path="/" active={ false } />
-                    <SidebarItem icon={ <BsPersonIcon /> } name="Players" path="/" active={ false } />
-                    <SidebarItem icon={ <IoTrophyOutlineIcon /> } name="Matches" path="/" active={ false } />
-                    <SidebarItem icon={ <MdOutlineDashboardIcon /> } name="Boards" path="/" active={ false } />
-                </DrawerBody>
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
-                <DrawerFooter justifyContent="start">
-                    <Box>
-                        <Divider marginBottom="12px" />
-                        <SidebarItem icon={ <CkQuestionOutlineIcon /> } name="Help Center" path="/" active={ false } />
-                        <SidebarItem icon={ <MdOutlineSettingsIcon /> } name="Settings" path="/" active={ false } />
-                        <Divider marginY="12px" />
-                        <SidebarUserDisplay name="Keenan Nguyen" email="knguyen5259@stu.d214.org" />
-                    </Box>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+    return (
+        <>
+            <Show below="md">
+                <IconButton
+                    aria-label="Open sidebar button"
+                    icon={ <HamburgerIcon /> }
+                    onClick={ onOpen }
+                    marginStart="16px"
+                    marginTop="16px"
+                    width="32px"
+                />
+                <Slide in={ isOpen } direction="left">
+                    <SidebarContent onClose={ onClose }>
+                        { children }
+                    </SidebarContent>
+                </Slide>
+            </Show>
+
+            <Hide below="md">
+                <SidebarContent>
+                    { children }
+                </SidebarContent>
+            </Hide>
+        </>
     )
 }
