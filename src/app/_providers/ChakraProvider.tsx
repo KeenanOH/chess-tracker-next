@@ -9,7 +9,13 @@ const theme = extendTheme({
         heading: "var(--font-rubik)",
         body: "var(--font-rubik)",
     },
-
+    components: {
+        Button: {
+            defaultProps: {
+                colorScheme: "blue",
+            },
+        },
+    },
 })
 
 export default function ChakraProvider({ children }: { children: React.ReactNode }) {

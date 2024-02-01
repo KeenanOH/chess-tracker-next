@@ -6,7 +6,7 @@ import { TRPCError } from "@trpc/server"
 export const matchRouter = router({
     create: authenticatedProcedure
         .input(z.object({
-            date: z.date(),
+            date: z.string().datetime(),
             homeSchoolId: z.string(),
             awaySchoolId: z.string()
         }))
@@ -23,7 +23,8 @@ export const matchRouter = router({
             id: z.string(),
             date: z.optional(z.date()),
             homeSchoolId: z.optional(z.string()),
-            awaySchoolId: z.optional(z.string())
+            awaySchoolId: z.optional(z.string()),
+            published: z.optional(z.boolean())
         }))
         .mutation(async ({ ctx, input }) => {
             if (!ctx.user.admin)
@@ -33,7 +34,8 @@ export const matchRouter = router({
                 data: {
                     date: input.date,
                     homeSchoolId: input.homeSchoolId,
-                    awaySchoolId: input.awaySchoolId
+                    awaySchoolId: input.awaySchoolId,
+                    published: input.published
                 },
                 where: {
                     id: input.id
@@ -61,7 +63,14 @@ export const matchRouter = router({
         })))
         .query(async ({ ctx, input }) =>
             ctx.prisma.match.findMany({
-                where: input
+                where: input,
+                select: {
+                    id: true,
+                    date: true,
+                    published: true,
+                    homeSchool: true,
+                    awaySchool: true
+                }
             })
         ),
     get: publicProcedure
@@ -80,5 +89,21 @@ export const matchRouter = router({
                     boards: true
                 }
             })
-        )
+        ),
+    deleteMany: authenticatedProcedure
+        .input(z.object({
+            matchIds: z.array(z.string())
+        }))
+        .mutation(({ ctx, input }) => {
+            if (!ctx.user.admin)
+                throw new TRPCError({ code: "UNAUTHORIZED" })
+
+            return ctx.prisma.match.deleteMany({
+                where: {
+                    id: {
+                        in: input.matchIds
+                    }
+                }
+            })
+        })
 })

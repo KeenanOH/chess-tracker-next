@@ -22,10 +22,10 @@ export default function AdminSidebar() {
             </SidebarHeader>
             <SidebarBody>
                 <SidebarItem icon={ <MdOutlineSpaceDashboardIcon /> } name="Dashboard" path="/admin/dashboard" />
-                <SidebarItem icon={ <IoSchoolOutlineIcon /> } name="Schools" path="/admin/schools" />
-                <SidebarItem icon={ <BsPersonIcon /> } name="Players" path="/admin/players" />
-                <SidebarItem icon={ <IoTrophyOutlineIcon /> } name="Matches" path="/admin/matches" />
-                <SidebarItem icon={ <MdOutlineDashboardIcon /> } name="Boards" path="/admin/boards" />
+                <SidebarItem icon={ <IoSchoolOutlineIcon /> } name="Schools" path="/admin/dashboard/schools" />
+                <SidebarItem icon={ <BsPersonIcon /> } name="Players" path="/admin/dashboard/players" />
+                <SidebarItem icon={ <IoTrophyOutlineIcon /> } name="Matches" path="/admin/dashboard/matches" />
+                <SidebarItem icon={ <MdOutlineDashboardIcon /> } name="Boards" path="/admin/dashboard/boards" />
             </SidebarBody>
             <SidebarFooter>
                 <SidebarItem icon={ <CkQuestionOutlineIcon /> } name="Help Center" path="/" />

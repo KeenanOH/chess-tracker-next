@@ -52,7 +52,7 @@ export default function Sidebar({ children }: { children: SidebarChildren }) {
                     marginTop="16px"
                     width="32px"
                 />
-                <Slide in={ isOpen } direction="left">
+                <Slide in={ isOpen } direction="left" className="z-10">
                     <SidebarContent onClose={ onClose }>
                         { children }
                     </SidebarContent>

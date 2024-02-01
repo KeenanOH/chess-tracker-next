@@ -19,7 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en">
-            <body className={ rubik.className }>
+            <body className={ rubik.className + " bg-[#F3F6FC]" }>
                 <main>
                     <TRPCProvider>
                         <NextAuthProvider>

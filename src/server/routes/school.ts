@@ -45,7 +45,7 @@ export const schoolRouter = router({
             id: z.string(),
             name: z.string()
         }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
@@ -62,12 +62,28 @@ export const schoolRouter = router({
         .input(z.object({
             id: z.string()
         }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
             return ctx.prisma.school.delete({
                 where: input
+            })
+        }),
+    deleteMany: authenticatedProcedure
+        .input(z.object({
+            schoolIds: z.array(z.string())
+        }))
+        .mutation(({ ctx, input }) => {
+            if (!ctx.user.admin)
+                throw new TRPCError({ code: "UNAUTHORIZED" })
+
+            return ctx.prisma.school.deleteMany({
+                where: {
+                    id: {
+                        in: input.schoolIds
+                    }
+                }
             })
         })
 })

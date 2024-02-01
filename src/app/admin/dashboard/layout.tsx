@@ -11,7 +11,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
     return (
         <Flex flexDirection={ ["column", null, "row"] }>
             <AdminSidebar />
-            <Box margin={ ["32px", null, "64px"] } height="100%" width="100%">
+            <Box margin={ ["32px", null, "64px"] } width={ [null, null, "100%"] }>
                 <Breadcrumbs />
                 { children }
             </Box>
