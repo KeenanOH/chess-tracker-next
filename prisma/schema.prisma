@@ -98,4 +98,5 @@ model Board {
   homePlayer   Player? @relation("homePlayer", fields: [homePlayerId], references: [id], onDelete: SetNull)
   awayPlayerId String?
   awayPlayer   Player? @relation("awayPlayer", fields: [awayPlayerId], references: [id], onDelete: SetNull)
+  result       String  @default("") // home, away, or draw
 }

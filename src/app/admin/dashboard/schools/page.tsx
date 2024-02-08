@@ -1,4 +1,5 @@
 import { Box, Heading } from "@chakra-ui/react"
+
 import SchoolsTable from "@/app/admin/dashboard/schools/_components/SchoolsTable"
 import { getCaller } from "@/server/caller"
 

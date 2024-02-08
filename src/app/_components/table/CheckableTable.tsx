@@ -1,20 +1,20 @@
-import React from "react"
+import { ChevronDownIcon } from "@chakra-ui/icons"
 import {
     Box,
+    Button,
     Card,
+    Checkbox,
     Flex,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Table,
     TableContainer,
     Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-    Button,
-    Checkbox,
-    useCheckboxGroup, Menu, MenuButton, MenuList, MenuItem
+    Td, Th, Thead, Tr, useCheckboxGroup
 } from "@chakra-ui/react"
-import { ChevronDownIcon } from "@chakra-ui/icons"
+import React from "react"
 
 type CheckableTypeProps<T> = {
     headers: string[]
@@ -45,11 +45,7 @@ export default function CheckableTable<T extends { id: string }>({ headers, data
                         ) }
                     </MenuList>
                 </Menu>
-                {/*<Flex gap="16px">*/}
-                {/*    <Button>Search</Button>*/}
-                {/*    <Button>Reset</Button>*/}
             </Flex>
-            {/*</Flex>*/}
             <TableContainer as={ Card } padding="16px">
                 <Table>
                     <Thead>

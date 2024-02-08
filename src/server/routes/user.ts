@@ -1,7 +1,7 @@
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { authenticatedProcedure, router } from "@/server/trpc"
-import { TRPCError } from "@trpc/server"
 
 export const userRouter = router({
     update: authenticatedProcedure

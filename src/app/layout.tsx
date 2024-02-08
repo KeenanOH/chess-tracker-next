@@ -1,10 +1,11 @@
-import React from "react"
-import { Rubik } from "next/font/google"
-
 import "./globals.css"
-import TRPCProvider from "@/app/_providers/TRPCProvider"
-import NextAuthProvider from "@/app/_providers/NextAuthProvider"
+
+import { Rubik } from "next/font/google"
+import React from "react"
+
 import ChakraProvider from "@/app/_providers/ChakraProvider"
+import NextAuthProvider from "@/app/_providers/NextAuthProvider"
+import TRPCProvider from "@/app/_providers/TRPCProvider"
 
 const rubik = Rubik({
     subsets: ["latin"],

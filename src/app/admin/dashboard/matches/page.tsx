@@ -1,6 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react"
-import { getCaller } from "@/server/caller"
+
 import MatchesTable from "@/app/admin/dashboard/matches/_components/MatchesTable"
+import { getCaller } from "@/server/caller"
 
 export default async function AdminDashboardMatches() {
 

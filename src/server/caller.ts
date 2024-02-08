@@ -1,8 +1,9 @@
-import { createCallerFactory } from "@/server/trpc"
-import { appRouter } from "@/server/appRouter"
 import { getServerSession } from "next-auth"
+
 import { nextAuthOptions } from "@/lib/nextAuth"
 import { prisma } from "@/lib/prisma"
+import { appRouter } from "@/server/appRouter"
+import { createCallerFactory } from "@/server/trpc"
 
 export const createCaller = createCallerFactory(appRouter)
 

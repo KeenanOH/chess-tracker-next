@@ -1,12 +1,12 @@
 "use client"
 
-import React from "react"
 import { Box, Flex } from "@chakra-ui/react"
+import React from "react"
 
-import AdminSidebar from "@/app/admin/dashboard/_components/AdminSidebar"
 import Breadcrumbs from "@/app/_components/Breadcrumbs"
+import AdminSidebar from "@/app/admin/dashboard/_components/AdminSidebar"
 
-export default function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <Flex flexDirection={ ["column", null, "row"] }>

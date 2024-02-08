@@ -1,10 +1,13 @@
 "use client"
 
-import { Match, School } from "@/app/types"
-import CheckableTable from "@/app/_components/table/CheckableTable"
 import { Td, useDisclosure, useToast } from "@chakra-ui/react"
 import { useState } from "react"
+
+import CheckableTable from "@/app/_components/table/CheckableTable"
 import CreateMatchModal from "@/app/admin/dashboard/matches/_components/CreateMatchModal"
+import { Match } from "@/lib/trpc/models/match"
+import { School } from "@/lib/trpc/models/school"
+
 import DeleteMatchModal from "./DeleteMatchModal"
 import UpdateMatchModal from "./UpdateMatchModal"
 
@@ -43,7 +46,7 @@ export default function MatchesTable({ matches, schools }: { matches: Match[], s
                     <>
                         <Td>{ data.homeSchool.name }</Td>
                         <Td>{ data.awaySchool.name }</Td>
-                        <Td>{ data.date.toDateString() }</Td>
+                        <Td>{ new Date(data.date).toDateString() }</Td>
                         <Td>{ data.published ? "True" : "False" }</Td>
                     </>
                 }

@@ -1,8 +1,8 @@
 "use client"
 
-import React from "react"
 import { ChakraProvider as CkProvider } from "@chakra-ui/react"
 import { extendTheme } from "@chakra-ui/react"
+import React from "react"
 
 const theme = extendTheme({
     fonts: {

@@ -1,12 +1,13 @@
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
+import { Match, selectMatch } from "@/lib/trpc/models/match"
 import { authenticatedProcedure, publicProcedure, router } from "@/server/trpc"
-import { TRPCError } from "@trpc/server"
 
 export const matchRouter = router({
     create: authenticatedProcedure
         .input(z.object({
-            date: z.string().datetime(),
+            date: z.date(),
             homeSchoolId: z.string(),
             awaySchoolId: z.string()
         }))
@@ -14,8 +15,18 @@ export const matchRouter = router({
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
-            return ctx.prisma.match.create({
-                data: input
+            const match = await ctx.prisma.match.create({
+                data: input,
+            })
+
+            const boards: { matchId: string, number: number }[] = []
+            for (let i = 1; i <= 8; i++) {
+                boards.push({ matchId: match.id, number: i })
+            }
+
+            await ctx.prisma.board.createMany({
+                data: boards,
+                skipDuplicates: true,
             })
         }),
     update: authenticatedProcedure
@@ -26,6 +37,7 @@ export const matchRouter = router({
             awaySchoolId: z.optional(z.string()),
             published: z.optional(z.boolean())
         }))
+        .output(Match)
         .mutation(async ({ ctx, input }) => {
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
@@ -39,7 +51,8 @@ export const matchRouter = router({
                 },
                 where: {
                     id: input.id
-                }
+                },
+                select: selectMatch
             })
         }),
     delete: authenticatedProcedure
@@ -50,7 +63,7 @@ export const matchRouter = router({
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
-            return ctx.prisma.match.delete({
+            await ctx.prisma.match.delete({
                 where: input
             })
         }),
@@ -61,33 +74,22 @@ export const matchRouter = router({
             awaySchoolId: z.optional(z.string()),
             published: z.optional(z.boolean())
         })))
+        .output(z.array(Match))
         .query(async ({ ctx, input }) =>
             ctx.prisma.match.findMany({
                 where: input,
-                select: {
-                    id: true,
-                    date: true,
-                    published: true,
-                    homeSchool: true,
-                    awaySchool: true
-                }
+                select: selectMatch
             })
         ),
     get: publicProcedure
         .input(z.object({
             id: z.string()
         }))
+        .output(z.nullable(Match))
         .query(({ ctx, input }) =>
             ctx.prisma.match.findFirst({
                 where: input,
-                select: {
-                    id: true,
-                    date: true,
-                    published: true,
-                    homeSchool: true,
-                    awaySchool: true,
-                    boards: true
-                }
+                select: selectMatch
             })
         ),
     deleteMany: authenticatedProcedure

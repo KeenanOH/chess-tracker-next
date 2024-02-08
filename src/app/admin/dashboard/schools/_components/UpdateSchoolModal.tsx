@@ -1,59 +1,26 @@
-import {
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay
-} from "@chakra-ui/modal"
-import { Button, Input, useToast } from "@chakra-ui/react"
-
-import { trpc } from "@/lib/trpc"
+import { Input } from "@chakra-ui/react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { School } from "@/app/types"
 
-export default function UpdateSchoolsModal({ isOpen, onClose, school }: { isOpen: boolean, onClose: () => void, school: School }) {
+import ActionModal from "@/app/_components/modals/ActionModal"
+import { ModalProps } from "@/app/types"
+import { School } from "@/lib/trpc/models/school"
+import { trpc } from "@/lib/trpc/trpc"
 
-    const updateSchoolMutation = trpc.school.update.useMutation()
-    const router = useRouter()
-    const toast = useToast()
-    const [name, setName] = useState("")
+export default function UpdateSchoolModal({ isOpen, onClose, school }: ModalProps & { school: School }) {
 
-    function updateSchool() {
-        if (name === "")
-            return
-
-        onClose()
-        const promise = updateSchoolMutation.mutateAsync({ id: school.id, name: name })
-            .then(() => router.refresh())
-
-        toast.promise(promise, {
-            success: { title: "Updated school", description: "This school has been updated." },
-            error: (e: Error) => ({ title: "An error has occurred", description: e.message }),
-            loading: { title: "Loading...", description: "Please wait" }
-        })
-    }
+    const updateSchool = trpc.school.update.useMutation()
+    const [name, setName] = useState(school.name)
 
     return (
-        <Modal isOpen={ isOpen } onClose={ onClose }>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Update a School</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Input defaultValue={ school.name } onChange={ e => setName(e.target.value) }/>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant="ghost">
-                        Close
-                    </Button>
-                    <Button onClick={ updateSchool }>
-                        Update
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+        <ActionModal
+            action={ () => updateSchool.mutateAsync({ id: school.id, name })}
+            isOpen={ isOpen }
+            onClose={ onClose }
+            header="Update School"
+            buttonText="Update"
+            successMessage="Updated School"
+        >
+            <Input defaultValue={ name } placeholder="Name" onChange={ e => setName(e.target.value) }/>
+        </ActionModal>
     )
 }

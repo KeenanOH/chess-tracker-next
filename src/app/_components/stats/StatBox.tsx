@@ -1,6 +1,6 @@
-import React from "react"
-import { Stat, StatLabel, StatNumber } from "@chakra-ui/stat"
 import { Card, CardBody, Circle, Flex } from "@chakra-ui/react"
+import { Stat, StatLabel, StatNumber } from "@chakra-ui/stat"
+import React from "react"
 
 export default function StatBox({ icon, label, number, align }: { icon: React.ReactNode, label: string, number: string | number, align?: string }) {
     return (

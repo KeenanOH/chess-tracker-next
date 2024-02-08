@@ -1,7 +1,8 @@
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
+import { Board, selectBoard } from "@/lib/trpc/models/board"
 import { authenticatedProcedure, publicProcedure, router } from "@/server/trpc"
-import { TRPCError } from "@trpc/server"
 
 export const boardRouter = router({
     create: authenticatedProcedure
@@ -11,12 +12,14 @@ export const boardRouter = router({
             homePlayerId: z.optional(z.string()),
             awayPlayerId: z.optional(z.string())
         }))
+        .output(Board)
         .mutation(async ({ ctx, input }) => {
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
             return ctx.prisma.board.create({
-                data: input
+                data: input,
+                select: selectBoard
             })
         }),
     delete: authenticatedProcedure
@@ -27,8 +30,24 @@ export const boardRouter = router({
             if (!ctx.user.admin)
                 throw new TRPCError({ code: "UNAUTHORIZED" })
 
-            return ctx.prisma.board.delete({
+            await ctx.prisma.board.delete({
                 where: input
+            })
+        }),
+    deleteMany: authenticatedProcedure
+        .input(z.object({
+            boardIds: z.array(z.string())
+        }))
+        .mutation(async ({ ctx, input }) => {
+            if (!ctx.user.admin)
+                throw new TRPCError({ code: "UNAUTHORIZED" })
+
+            await ctx.prisma.board.deleteMany({
+                where: {
+                    id: {
+                        in: input.boardIds
+                    }
+                }
             })
         }),
     update: authenticatedProcedure
@@ -37,6 +56,7 @@ export const boardRouter = router({
             homePlayerId: z.optional(z.nullable(z.string())),
             awayPlayerId: z.optional(z.nullable(z.string()))
         }))
+        .output(Board)
         .mutation(async ({ ctx, input }) => {
             if (ctx.user.admin)
                 return ctx.prisma.board.update({
@@ -46,7 +66,8 @@ export const boardRouter = router({
                     },
                     where: {
                         id: input.id
-                    }
+                    },
+                    select: selectBoard
                 })
 
             if (!ctx.user.schoolId)
@@ -65,32 +86,30 @@ export const boardRouter = router({
                             { awaySchoolId: ctx.user.schoolId }
                         ]
                     }
-                }
+                },
+                select: selectBoard
             })
         }),
     getAll: publicProcedure
-        .input(z.object({
-            matchId: z.string()
-        }))
+        .input(z.optional(z.object({
+            matchId: z.optional(z.string())
+        })))
+        .output(z.array(Board))
         .query(async ({ ctx, input }) =>
             ctx.prisma.board.findMany({
-                where: input
+                where: input,
+                select: selectBoard
             })
         ),
     get: publicProcedure
         .input(z.object({
             id: z.string()
         }))
+        .output(z.nullable(Board))
         .query(async ({ ctx, input }) =>
             ctx.prisma.board.findFirst({
                 where: input,
-                select: {
-                    id: true,
-                    number: true,
-                    match: true,
-                    homePlayer: true,
-                    awayPlayer: true
-                }
+                select: selectBoard
             })
         )
 })

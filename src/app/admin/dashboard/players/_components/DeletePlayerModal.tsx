@@ -1,51 +1,21 @@
-import { useRouter } from "next/navigation"
-import { Button, useToast } from "@chakra-ui/react"
-import { trpc } from "@/lib/trpc"
-import {
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay
-} from "@chakra-ui/modal"
+import ActionModal from "@/app/_components/modals/ActionModal"
+import { ModalProps } from "@/app/types"
+import { trpc } from "@/lib/trpc/trpc"
 
-export default function DeletePlayerModal({ isOpen, onClose, playerIds }: { isOpen: boolean, onClose: () => void, playerIds: string[] }) {
-    const router = useRouter()
-    const toast = useToast()
+export default function DeletePlayerModal({ isOpen, onClose, playerIds }: ModalProps & { playerIds: string[] }) {
+
     const deleteManyPlayers = trpc.player.deleteMany.useMutation()
 
-    function deletePlayers() {
-        onClose()
-        const promise = deleteManyPlayers.mutateAsync({ playerIds })
-            .then(() => router.refresh())
-
-        toast.promise(promise, {
-            success: { title: "Deleted Player(s)", description: "These players have been deleted." },
-            error: (e: Error) => ({ title: "An error has occurred", description: e.message }),
-            loading: { title: "Loading...", description: "Please wait" }
-        })
-    }
-
     return (
-        <Modal isOpen={ isOpen } onClose={ onClose }>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Delete School(s)</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    You are about to delete { playerIds.length } player(s). Press delete to proceed.
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant="ghost">
-                        Close
-                    </Button>
-                    <Button onClick={ deletePlayers }>
-                        Delete
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+        <ActionModal
+            action={ () => deleteManyPlayers.mutateAsync({ playerIds })}
+            isOpen={ isOpen }
+            onClose={ onClose }
+            header="Delete Player(s)"
+            buttonText="Delete"
+            successMessage={ `Deleted ${playerIds.length} player(s)` }
+        >
+            You are about to delete { playerIds.length } player(s). Press delete to confirm.
+        </ActionModal>
     )
 }

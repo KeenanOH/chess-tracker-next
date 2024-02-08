@@ -1,6 +1,6 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
-import React from "react"
 import { usePathname } from "next/navigation"
+import React from "react"
 
 export default function Breadcrumbs() {
 

@@ -1,4 +1,7 @@
-import { describe, it, expect } from "vitest"
+import { TRPCError } from "@trpc/server"
+import { describe, expect, it } from "vitest"
+
+import { adminDeletablePlayer, deletablePlayer, schoolOne, schoolOnePlayer } from "../../lib/prisma/seed"
 import {
     adminUserCaller,
     schoolOneUserCaller,
@@ -6,8 +9,6 @@ import {
     unauthenticatedCaller,
     userCaller
 } from "../../lib/trpc"
-import { TRPCError } from "@trpc/server"
-import { adminDeletablePlayer, deletablePlayer, schoolOne, schoolOnePlayer } from "../../lib/prisma/seed"
 
 describe("player.create tests", () => {
 

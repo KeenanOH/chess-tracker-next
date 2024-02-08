@@ -1,7 +1,7 @@
-import React from "react"
 import { Link } from "@chakra-ui/next-js"
 import { Flex, Text } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
+import React from "react"
 
 export default function SidebarItem({ icon, name, path }: { icon: React.ReactNode, name: string, path: string }) {
 

@@ -1,9 +1,10 @@
 import { Box, Heading, SimpleGrid } from "@chakra-ui/react"
-import StatBox from "@/app/_components/stats/StatBox"
+
 import IoSchoolOutlineIcon from "@/app/_components/icons/IoSchoolOutlineIcon"
 import MdOutlineDashboardIcon from "@/app/_components/icons/MdOutlineDashboardIcon"
+import StatBox from "@/app/_components/stats/StatBox"
 
-export default async function AdminDashboard() {
+export default function AdminDashboard() {
 
     return (
         <Box>

@@ -1,6 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react"
-import { getCaller } from "@/server/caller"
+
 import PlayersTable from "@/app/admin/dashboard/players/_components/PlayersTable"
+import { getCaller } from "@/server/caller"
 
 export default async function AdminDashboardPlayers() {
 

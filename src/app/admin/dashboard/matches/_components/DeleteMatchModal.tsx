@@ -1,51 +1,21 @@
-import { useRouter } from "next/navigation"
-import { Button, useToast } from "@chakra-ui/react"
-import { trpc } from "@/lib/trpc"
-import {
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay
-} from "@chakra-ui/modal"
+import ActionModal from "@/app/_components/modals/ActionModal"
+import { ModalProps } from "@/app/types"
+import { trpc } from "@/lib/trpc/trpc"
 
-export default function DeletePlayerModal({ isOpen, onClose, matchIds }: { isOpen: boolean, onClose: () => void, matchIds: string[] }) {
-    const router = useRouter()
-    const toast = useToast()
+export default function DeleteMatchModal({ isOpen, onClose, matchIds }: ModalProps & { matchIds: string[] }) {
+
     const deleteManyMatches = trpc.match.deleteMany.useMutation()
 
-    function deleteMatches() {
-        onClose()
-        const promise = deleteManyMatches.mutateAsync({ matchIds })
-            .then(() => router.refresh())
-
-        toast.promise(promise, {
-            success: { title: "Deleted Match(es)", description: "These matches have been deleted." },
-            error: (e: Error) => ({ title: "An error has occurred", description: e.message }),
-            loading: { title: "Loading...", description: "Please wait" }
-        })
-    }
-
     return (
-        <Modal isOpen={ isOpen } onClose={ onClose }>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Delete Matches(s)</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    You are about to delete { matchIds.length } matches(s). Press delete to proceed.
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant="ghost">
-                        Close
-                    </Button>
-                    <Button onClick={ deleteMatches }>
-                        Delete
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+        <ActionModal
+            action={ () => deleteManyMatches.mutateAsync({ matchIds }) }
+            isOpen={ isOpen }
+            onClose={ onClose }
+            header="Delete Match(es)"
+            buttonText="Delete"
+            successMessage={ `Deleted ${matchIds.length} match(es)` }
+        >
+            You are about to delete { matchIds.length } match(es). Press delete to confirm.
+        </ActionModal>
     )
 }

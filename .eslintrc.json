@@ -18,7 +18,8 @@
     "plugins": [
         "@typescript-eslint",
         "react",
-        "@stylistic"
+        "@stylistic",
+        "simple-import-sort"
     ],
     "rules": {
         "indent": [
@@ -40,6 +41,8 @@
         "@stylistic/template-curly-spacing": [
             "error",
             "never"
-        ]
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error"
     }
 }

@@ -1,10 +1,10 @@
-import React from "react"
+import { HamburgerIcon } from "@chakra-ui/icons"
 import { Box, CloseButton, Flex, Hide, IconButton, Show, Slide, useDisclosure } from "@chakra-ui/react"
+import React from "react"
 
 import SidebarBody from "@/app/_components/sidebar/SidebarBody"
 import SidebarFooter from "@/app/_components/sidebar/SidebarFooter"
 import SidebarHeader from "@/app/_components/sidebar/SidebarHeader"
-import { HamburgerIcon } from "@chakra-ui/icons"
 
 type SidebarChildren = [React.ReactElement<typeof SidebarHeader>, React.ReactElement<typeof SidebarBody>, React.ReactElement<typeof SidebarFooter>]
 

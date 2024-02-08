@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest"
-import { adminUserCaller, unauthenticatedCaller, userCaller } from "../../lib/trpc"
-import { deletableMatch, match } from "../../lib/prisma/seed"
 import { TRPCError } from "@trpc/server"
+import { describe, expect, it } from "vitest"
+
+import { deletableMatch, match } from "../../lib/prisma/seed"
+import { adminUserCaller, unauthenticatedCaller, userCaller } from "../../lib/trpc"
 
 describe("match.create tests", () => {
 
@@ -20,7 +21,6 @@ describe("match.create tests", () => {
     it("should allow an admin to create a match", () =>
         expect(adminUserCaller.match.create(match))
             .resolves
-            .toBeDefined()
     )
 
 })

@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest"
-import { adminUserCaller, schoolOneUserCaller, unauthenticatedCaller, userCaller } from "../../lib/trpc"
-import { board, deletableBoard, match } from "../../lib/prisma/seed"
 import { TRPCError } from "@trpc/server"
+import { describe, expect, it } from "vitest"
+
+import { board, deletableBoard, match } from "../../lib/prisma/seed"
+import { adminUserCaller, schoolOneUserCaller, unauthenticatedCaller, userCaller } from "../../lib/trpc"
 
 describe("board.create tests", () => {
 

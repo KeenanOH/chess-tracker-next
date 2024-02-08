@@ -1,12 +1,14 @@
 "use client"
 
-import { Player, School } from "@/app/types"
-import CheckableTable from "@/app/_components/table/CheckableTable"
 import { Td, useDisclosure, useToast } from "@chakra-ui/react"
 import { useState } from "react"
+
+import CheckableTable from "@/app/_components/table/CheckableTable"
 import CreatePlayerModal from "@/app/admin/dashboard/players/_components/CreatePlayerModal"
 import DeletePlayerModal from "@/app/admin/dashboard/players/_components/DeletePlayerModal"
 import UpdatePlayerModal from "@/app/admin/dashboard/players/_components/UpdatePlayerModal"
+import { Player } from "@/lib/trpc/models/player"
+import { School } from "@/lib/trpc/models/school"
 
 export default function PlayersTable({ players, schools }: { players: Player[], schools: School[] }) {
 
