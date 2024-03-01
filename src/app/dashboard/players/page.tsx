@@ -1,12 +1,19 @@
 import { Box, Heading } from "@chakra-ui/react"
 
 import PlayersTable from "@/app/dashboard/players/_components/PlayersTable"
+import { Player } from "@/lib/trpc/models/player"
 import { getCaller } from "@/server/caller"
 
 export default async function DashboardPlayers() {
 
-    const caller = await getCaller()
-    const players = await caller.player.getAll()
+    const { caller, user } = await getCaller()
+
+    let players: Player[]
+
+    if (user?.schoolId)
+        players = await caller.getPlayers({ schoolId: user.schoolId })
+    else
+        players = []
 
     return (
         <Box>

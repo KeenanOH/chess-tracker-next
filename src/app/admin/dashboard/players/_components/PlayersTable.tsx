@@ -12,7 +12,6 @@ import { School } from "@/lib/trpc/models/school"
 
 export default function PlayersTable({ players, schools }: { players: Player[], schools: School[] }) {
 
-
     const toast = useToast()
     const createPlayerModal = useDisclosure()
     const deletePlayerModal = useDisclosure()

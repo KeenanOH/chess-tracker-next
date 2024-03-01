@@ -9,7 +9,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function UpdatePlayerModal({ isOpen, onClose, player, schools }: ModalProps & { player: Player, schools: School[] }) {
 
-    const updatePlayerMutation = trpc.player.update.useMutation()
+    const updatePlayerMutation = trpc.updatePlayer.useMutation()
     const [firstName, setFirstName] = useState(player.firstName)
     const [lastName, setLastName] = useState(player.lastName)
     const [schoolId, setSchoolId] = useState(player.school.id)

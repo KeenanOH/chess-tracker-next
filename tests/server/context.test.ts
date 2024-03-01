@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 
 import { createContext } from "@/server/context"
 
-import { user } from "../lib/prisma/seed"
+import { user } from "../lib/prisma/seed/users"
 
 describe("Context Tests", () => {
 

@@ -4,21 +4,19 @@ import { z } from "zod"
 import { authenticatedProcedure, router } from "@/server/trpc"
 
 export const userRouter = router({
-    update: authenticatedProcedure
+    updateUser: authenticatedProcedure
         .input(z.object({
-            schoolCode: z.string()
+            secretCode: z.string()
         }))
         .mutation(async ({ ctx, input }) => {
             const school = await ctx.prisma.school.findFirst({
-                where: {
-                    secretCode: input.schoolCode
-                }
+                where: input
             })
 
             if (!school)
                 throw new TRPCError({ code: "BAD_REQUEST" })
 
-            return ctx.prisma.user.update({
+            await ctx.prisma.user.update({
                 data: {
                     schoolId: school.id
                 },

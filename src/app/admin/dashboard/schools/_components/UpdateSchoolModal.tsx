@@ -8,7 +8,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function UpdateSchoolModal({ isOpen, onClose, school }: ModalProps & { school: School }) {
 
-    const updateSchool = trpc.school.update.useMutation()
+    const updateSchool = trpc.updateSchool.useMutation()
     const [name, setName] = useState(school.name)
 
     return (

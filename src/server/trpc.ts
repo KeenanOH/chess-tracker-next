@@ -20,4 +20,17 @@ export const authenticatedProcedure = t.procedure.use(async (opts) => {
         }
     })
 })
+export const adminProcedure = t.procedure.use(async (opts) => {
+    const { user } = opts.ctx
+
+    if (!user?.admin)
+        throw new TRPCError({ code: "UNAUTHORIZED" })
+
+    return opts.next({
+        ctx: {
+            user
+        }
+    })
+})
 export const createCallerFactory = t.createCallerFactory
+export const mergeRouters = t.mergeRouters

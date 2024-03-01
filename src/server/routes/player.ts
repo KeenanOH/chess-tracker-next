@@ -6,7 +6,7 @@ import { PlayerDetail, selectPlayerDetail } from "@/lib/trpc/models/playerDetail
 import { authenticatedProcedure, publicProcedure, router } from "@/server/trpc"
 
 export const playerRouter = router({
-    create: authenticatedProcedure
+    createPlayer: authenticatedProcedure
         .input(z.object({
             firstName: z.string(),
             lastName: z.string(),
@@ -35,41 +35,22 @@ export const playerRouter = router({
                 select: selectPlayer
             })
         }),
-    delete: authenticatedProcedure
+    deletePlayers: authenticatedProcedure
         .input(z.object({
-            id: z.string()
+            ids: z.array(z.string())
         }))
         .mutation(async ({ ctx, input }) => {
-            if (ctx.user.admin)
-                return ctx.prisma.player.delete({
-                    where: {
-                        id: input.id,
-                    }
-                })
-
-            if (!ctx.user.schoolId)
-                throw new TRPCError({ code: "FORBIDDEN" })
-
-            await ctx.prisma.player.delete({
-                where: {
-                    id: input.id,
-                    schoolId: ctx.user.schoolId
-                }
-            })
-        }),
-    deleteMany: authenticatedProcedure
-        .input(z.object({
-            playerIds: z.array(z.string())
-        }))
-        .mutation(async ({ ctx, input }) => {
-            if (ctx.user.admin)
-                return ctx.prisma.player.deleteMany({
+            if (ctx.user.admin) {
+                await ctx.prisma.player.deleteMany({
                     where: {
                         id: {
-                            in: input.playerIds
+                            in: input.ids
                         }
                     }
                 })
+
+                return
+            }
 
             if (!ctx.user.schoolId)
                 throw new TRPCError({ code: "FORBIDDEN" })
@@ -77,13 +58,13 @@ export const playerRouter = router({
             await ctx.prisma.player.deleteMany({
                 where: {
                     id: {
-                        in: input.playerIds
+                        in: input.ids
                     },
                     schoolId: ctx.user.schoolId
                 }
             })
         }),
-    update: authenticatedProcedure
+    updatePlayer: authenticatedProcedure
         .input(z.object({
             id: z.string(),
             firstName: z.optional(z.string()),
@@ -93,7 +74,7 @@ export const playerRouter = router({
         .output(Player)
         .mutation(async ({ ctx, input }) => {
             if (ctx.user.admin)
-                return ctx.prisma.player.update({
+                return await ctx.prisma.player.update({
                     data: {
                         firstName: input.firstName,
                         lastName: input.lastName,
@@ -108,7 +89,7 @@ export const playerRouter = router({
             if (!ctx.user.schoolId)
                 throw new TRPCError({ code: "FORBIDDEN" })
 
-            return ctx.prisma.player.update({
+            return await ctx.prisma.player.update({
                 data: {
                     firstName: input.firstName,
                     lastName: input.lastName
@@ -120,20 +101,18 @@ export const playerRouter = router({
                 select: selectPlayer
             })
         }),
-    getAll: publicProcedure
-        .input(z.optional(
-            z.object({
-                schoolId: z.string()
-            })
-        ))
+    getPlayers: publicProcedure
+        .input(z.optional(z.object({
+            schoolId: z.string()
+        })))
         .output(z.array(Player))
-        .query(async ({ ctx, input }) =>
-            ctx.prisma.player.findMany({
+        .query(async ({ ctx, input }) => {
+            return ctx.prisma.player.findMany({
                 where: input,
                 select: selectPlayer
             })
-        ),
-    get: publicProcedure
+        }),
+    getPlayer: publicProcedure
         .input(z.object({
             id: z.string()
         }))

@@ -27,12 +27,13 @@ export default function AdminSidebar() {
                 <SidebarItem icon={ <BsPersonIcon /> } name="Players" path="/admin/dashboard/players" />
                 <SidebarItem icon={ <IoTrophyOutlineIcon /> } name="Matches" path="/admin/dashboard/matches" />
                 <SidebarItem icon={ <MdOutlineDashboardIcon /> } name="Boards" path="/admin/dashboard/boards" />
+                <SidebarItem icon={ <IoTrophyOutlineIcon /> } name="Sorted Matches" path="/admin/dashboard/sortedMatches" />
             </SidebarBody>
             <SidebarFooter>
                 <SidebarItem icon={ <CkQuestionOutlineIcon /> } name="Help Center" path="/" />
                 <SidebarItem icon={ <MdOutlineSettingsIcon /> } name="Settings" path="/" />
                 <Divider marginY="12px" />
-                <SidebarUserDisplay name="Keenan Nguyen" email="knguyen5259@stu.d214.org" />
+                <SidebarUserDisplay />
             </SidebarFooter>
         </Sidebar>
     )

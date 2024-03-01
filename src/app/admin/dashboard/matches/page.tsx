@@ -5,9 +5,9 @@ import { getCaller } from "@/server/caller"
 
 export default async function AdminDashboardMatches() {
 
-    const caller = await getCaller()
-    const matches = await caller.match.getAll()
-    const schools = await caller.school.getAll()
+    const { caller } = await getCaller()
+    const matches = await caller.getMatches()
+    const schools = await caller.getSchools()
 
     return (
         <Box>

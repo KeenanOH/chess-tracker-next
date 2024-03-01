@@ -1,15 +1,9 @@
 import { prisma } from "./lib/prisma/client"
-import {
-    adminDeletablePlayer,
-    adminUser, board, deletableBoard, deletableMatch, deletablePlayer, deletableSchool, match,
-    schoolOne,
-    schoolOnePlayer,
-    schoolOneUser,
-    schoolTwo,
-    schoolTwoPlayer,
-    schoolTwoUser,
-    user
-} from "./lib/prisma/seed"
+import { board } from "./lib/prisma/seed/boards"
+import { deletableMatch, match } from "./lib/prisma/seed/matches"
+import { adminDeletablePlayer, deletablePlayer, schoolOnePlayer, schoolTwoPlayer } from "./lib/prisma/seed/players"
+import { deletableSchool, schoolOne, schoolTwo } from "./lib/prisma/seed/schools"
+import { adminUser, schoolOneUser, schoolTwoUser, user } from "./lib/prisma/seed/users"
 
 await prisma.school.upsert({
     update: schoolOne,
@@ -122,12 +116,3 @@ await prisma.board.upsert({
         id: board.id
     }
 })
-
-await prisma.board.upsert({
-    update: deletableBoard,
-    create: deletableBoard,
-    where: {
-        id: deletableBoard.id
-    }
-})
-

@@ -9,7 +9,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function CreateMatchModal({ isOpen, onClose, schools }: ModalProps & { schools: School[] }) {
 
-    const createMatchMutation = trpc.match.create.useMutation()
+    const createMatchMutation = trpc.createMatch.useMutation()
     const [date, setDate] = useState(new Date())
     const [homeSchoolId, setHomeSchoolId] = useState("")
     const [awaySchoolId, setAwaySchoolId] = useState("")

@@ -7,14 +7,22 @@ import { createCallerFactory } from "@/server/trpc"
 
 export const createCaller = createCallerFactory(appRouter)
 
-export async function getCaller() {
+export async function getUser() {
     const session = await getServerSession(nextAuthOptions)
 
-    const user = session?.user && await prisma.user.findFirst({
+    return session?.user && await prisma.user.findFirst({
         where: {
             email: session.user.email
         }
     })
+}
 
-    return createCaller({ user, prisma })
+export async function getCaller() {
+    const user = await getUser()
+
+    const context = { user, prisma }
+    return {
+        caller: createCaller(context),
+        user
+    }
 }

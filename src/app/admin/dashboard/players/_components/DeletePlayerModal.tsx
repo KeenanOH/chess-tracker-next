@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function DeletePlayerModal({ isOpen, onClose, playerIds }: ModalProps & { playerIds: string[] }) {
 
-    const deleteManyPlayers = trpc.player.deleteMany.useMutation()
+    const deleteManyPlayers = trpc.deletePlayers.useMutation()
 
     return (
         <ActionModal

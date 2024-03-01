@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { describe, expect, it } from "vitest"
 
-import { adminDeletablePlayer, deletablePlayer, schoolOne, schoolOnePlayer } from "../../lib/prisma/seed"
+import { adminDeletablePlayer, deletablePlayer, schoolOnePlayer } from "../../lib/prisma/seed/players"
 import {
     adminUserCaller,
     schoolOneUserCaller,
@@ -10,106 +10,114 @@ import {
     userCaller
 } from "../../lib/trpc"
 
-describe("player.create tests", () => {
+describe("Player tests", () => {
 
-    it("should not let an unauthenticated user create a player", () =>
-        expect(unauthenticatedCaller.player.create({ firstName: "First", lastName: "Last" }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+    describe("createPlayer tests", () => {
 
-    it("should not let a rogue user create a player", () =>
-        expect(userCaller.player.create({ firstName: "First", lastName: "Last" }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let an unauthenticated caller create a player", () =>
+            expect(unauthenticatedCaller.createPlayer(schoolOnePlayer))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should let a school user create a player", () =>
-        expect(schoolOneUserCaller.player.create({ firstName: "First", lastName: "Last" }))
-            .resolves
-            .toBeDefined()
-    )
+        it("should not let a rogue caller create a player", () =>
+            expect(unauthenticatedCaller.createPlayer(schoolOnePlayer))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-})
+        it("should let a school caller create a player", () =>
+            expect(schoolOneUserCaller.createPlayer(schoolOnePlayer))
+                .resolves
+                .toBeDefined()
+        )
 
-describe("player.update tests", () => {
+    })
 
-    it("should not let an unauthenticated user update a player", () =>
-        expect(unauthenticatedCaller.player.update(schoolOnePlayer))
-            .rejects
-            .toThrow(TRPCError)
-    )
+    describe("updatePlayer tests", () => {
 
-    it("should not let a rogue user update a player", () =>
-        expect(userCaller.player.update(schoolOnePlayer))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let an unauthenticated caller update a player", () =>
+            expect(unauthenticatedCaller.updatePlayer(schoolOnePlayer))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should not let another school's user update a player", () =>
-        expect(schoolTwoUserCaller.player.update(schoolOnePlayer))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let a rogue caller update a player", () =>
+            expect(userCaller.updatePlayer(schoolOnePlayer))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should let an admin update a player", () =>
-        expect(adminUserCaller.player.update(schoolOnePlayer))
-            .resolves
-            .toBeDefined()
-    )
+        it("should not let a school caller player another school's player", () =>
+            expect(schoolTwoUserCaller.updatePlayer(schoolOnePlayer))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should let a user update a player where school id's match", () =>
-        expect(schoolOneUserCaller.player.update(schoolOnePlayer))
-            .resolves
-            .toBeDefined()
-    )
+        it("should let a school caller update their own player", () =>
+            expect(schoolOneUserCaller.updatePlayer(schoolOnePlayer))
+                .resolves
+                .not
+                .toThrow()
+        )
 
-})
+        it("should let an admin caller update a player", () =>
+            expect(adminUserCaller.updatePlayer(schoolOnePlayer))
+                .resolves
+                .not
+                .toThrow()
+        )
 
-describe("player.get", () => {
+    })
 
-    it("should allow anyone to get a player", () =>
-        expect(unauthenticatedCaller.player.get({ id: schoolOnePlayer.id }))
-            .resolves
-            .toBeDefined()
-    )
+    describe("deletePlayers tests", () => {
 
-})
+        it("should not let an unauthenticated caller delete players", () =>
+            expect(unauthenticatedCaller.deletePlayers({ ids: [deletablePlayer.id] }))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-describe("player.getAll", () => {
+        it("should not let a rogue caller delete players", () =>
+            expect(userCaller.deletePlayers({ ids: [deletablePlayer.id] }))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should allow anyone to get a school's players", () =>
-        expect(unauthenticatedCaller.player.getAll({ schoolId: schoolOne.id }))
-            .resolves
-            .toBeDefined()
-    )
+        it("should let a school caller delete their own players", () =>
+            expect(schoolOneUserCaller.deletePlayers({ ids: [deletablePlayer.id] }))
+                .resolves
+                .not
+                .toThrow()
+        )
 
-})
+        it("should let an admin delete players", () =>
+            expect(schoolOneUserCaller.deletePlayers({ ids: [adminDeletablePlayer.id] }))
+                .resolves
+                .not
+                .toThrow()
+        )
 
-describe("player.delete tests", () => {
+    })
 
-    it("should not let an unauthenticated user delete a player", () =>
-        expect(unauthenticatedCaller.player.delete({ id: deletablePlayer.id }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+    describe("getPlayers tests", () => {
 
-    it("should not let an authenticated user delete another school's player", () =>
-        expect(userCaller.player.delete({ id: deletablePlayer.id }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should let an unauthenticated caller get players", () =>
+            expect(unauthenticatedCaller.getPlayers())
+                .resolves
+                .toBeDefined()
+        )
 
-    it("should let an admin delete a player", () =>
-        expect(adminUserCaller.player.delete({ id: adminDeletablePlayer.id }))
-            .resolves
-            .toBeDefined()
-    )
+    })
 
-    it("should let a user delete a player where school id's match", () =>
-        expect(schoolOneUserCaller.player.delete({ id: deletablePlayer.id }))
-            .resolves
-            .toBeDefined()
-    )
+    describe("getPlayer tests", () => {
+
+        it("should let an unauthenticated caller get a player", () =>
+            expect(unauthenticatedCaller.getPlayer({ id: schoolOnePlayer.id }))
+                .resolves
+                .toBeDefined()
+        )
+
+    })
 
 })

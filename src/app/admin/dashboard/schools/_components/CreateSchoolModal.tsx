@@ -11,7 +11,7 @@ type CreateSchoolModalProps = {
 
 export default function CreateSchoolModal({ isOpen, onClose }: CreateSchoolModalProps) {
 
-    const createSchool = trpc.school.create.useMutation()
+    const createSchool = trpc.createSchool.useMutation()
     const [name, setName] = useState("")
 
     return (

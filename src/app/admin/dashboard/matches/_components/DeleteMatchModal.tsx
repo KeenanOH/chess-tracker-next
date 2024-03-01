@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function DeleteMatchModal({ isOpen, onClose, matchIds }: ModalProps & { matchIds: string[] }) {
 
-    const deleteManyMatches = trpc.match.deleteMany.useMutation()
+    const deleteManyMatches = trpc.deleteMatches.useMutation()
 
     return (
         <ActionModal

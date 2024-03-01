@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function DeleteSchoolModal({ isOpen, onClose, schoolIds }: ModalProps & { schoolIds: string[] }) {
 
-    const deleteSchool = trpc.school.deleteMany.useMutation()
+    const deleteSchool = trpc.deleteSchools.useMutation()
 
     return (
         <ActionModal

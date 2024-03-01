@@ -5,9 +5,9 @@ import { getCaller } from "@/server/caller"
 
 export default async function AdminDashboardPlayers() {
 
-    const caller = await getCaller()
-    const players = await caller.player.getAll()
-    const schools = await caller.school.getAll()
+    const { caller } = await getCaller()
+    const players = await caller.getPlayers()
+    const schools = await caller.getSchools()
 
     return (
         <Box>

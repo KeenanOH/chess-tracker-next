@@ -1,92 +1,92 @@
 import { TRPCError } from "@trpc/server"
 import { describe, expect, it } from "vitest"
 
-import { deletableSchool, schoolOne } from "../../lib/prisma/seed"
+import { deletableSchool, schoolOne } from "../../lib/prisma/seed/schools"
 import { adminUserCaller, unauthenticatedCaller, userCaller } from "../../lib/trpc"
 
+describe("School tests", () => {
 
-describe("school.create tests", () => {
+    describe("createSchool tests", () => {
 
-    it("should not let an unauthenticated user create a school", () =>
-        expect(unauthenticatedCaller.school.create({ name: "School Name" }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let an unauthenticated caller create a school", () =>
+            expect(unauthenticatedCaller.createSchool(schoolOne))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should not let a non-admin create a school", () =>
-        expect(userCaller.school.create({ name: "School Name" }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let an authenticated caller create a school", () =>
+            expect(userCaller.createSchool(schoolOne))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should let an admin create a school", () =>
-        expect(adminUserCaller.school.create({ name: "School Name" }))
-            .resolves
-            .toBeDefined()
-    )
+        it("should let an admin caller to create a school", () =>
+            expect(adminUserCaller.createSchool(schoolOne))
+        )
 
-})
+    })
 
-describe("school.getAll tests", () => {
+    describe("updateSchool tests", () => {
 
-    it("should let anyone get all schools", () =>
-        expect(unauthenticatedCaller.school.getAll())
-            .resolves
-            .toBeDefined()
-    )
+        it("should not let an unauthenticated caller update a school", () =>
+            expect(unauthenticatedCaller.updateSchool(schoolOne))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-})
+        it("should not let an authenticated caller update a school", () =>
+            expect(userCaller.updateSchool(schoolOne))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-describe("school.get tests", () => {
+        it("should let an admin caller to update a school", () =>
+            expect(adminUserCaller.updateSchool(schoolOne))
+        )
 
-    it("should let anyone get a specific school", () =>
-        expect(unauthenticatedCaller.school.get({ id: schoolOne.id }))
-            .resolves
-            .toBeDefined()
-    )
+    })
 
-})
+    describe("deleteSchools tests", () => {
 
-describe("school.update tests", () => {
+        it("should not let an unauthenticated caller delete schools", () =>
+            expect(unauthenticatedCaller.deleteSchools({ ids: [deletableSchool.id] }))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should not allow an unauthenticated user to update a school", () =>
-        expect(unauthenticatedCaller.school.update({ id: schoolOne.id, name: schoolOne.name }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should not let an authenticated caller delete schools", () =>
+            expect(userCaller.deleteSchools({ ids: [deletableSchool.id] }))
+                .rejects
+                .toThrow(TRPCError)
+        )
 
-    it("should not allow a user to update a school", () =>
-        expect(userCaller.school.update({ id: schoolOne.id, name: schoolOne.name }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+        it("should let an admin caller delete schools", () =>
+            expect(adminUserCaller.deleteSchools({ ids: [deletableSchool.id] }))
+                .resolves
+                .not
+                .toThrow()
+        )
 
-    it("should allow an admin to update a school", () =>
-        expect(adminUserCaller.school.update({ id: schoolOne.id, name: schoolOne.name }))
-            .resolves
-            .toBeDefined()
-    )
+    })
 
-})
+    describe("getSchools tests", () => {
 
-describe("school.delete tests", () => {
+        it("should let an unauthenticated caller get schools", () =>
+            expect(unauthenticatedCaller.getSchools())
+                .resolves
+                .toBeDefined()
+        )
 
-    it("should not allow an unauthenticated user to delete a school", () =>
-        expect(unauthenticatedCaller.school.delete({ id: deletableSchool.id }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+    })
 
-    it("should not allow a user to delete a school", () =>
-        expect(userCaller.school.delete({ id: deletableSchool.id }))
-            .rejects
-            .toThrow(TRPCError)
-    )
+    describe("getSchool tests", () => {
 
-    it("should allow an admin to delete a school", () =>
-        expect(adminUserCaller.school.delete({ id: deletableSchool.id }))
-            .resolves
-            .toBeDefined()
-    )
+        it("should let an unauthenticated caller get a school", () =>
+            expect(unauthenticatedCaller.getSchool({ id: schoolOne.id }))
+                .resolves
+                .toBeDefined()
+        )
+
+    })
 
 })

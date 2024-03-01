@@ -1,3 +1,5 @@
+"use client"
+
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
 import { usePathname } from "next/navigation"
 import React from "react"

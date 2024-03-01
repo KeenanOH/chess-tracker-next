@@ -1,7 +1,7 @@
 import { createCaller } from "@/server/caller"
 
 import { prisma } from "./prisma/client"
-import { adminUser, schoolOneUser, schoolTwoUser, user } from "./prisma/seed"
+import { adminUser, schoolOneUser, schoolTwoUser, user } from "./prisma/seed/users"
 
 export const unauthenticatedCaller = createCaller({
     prisma,

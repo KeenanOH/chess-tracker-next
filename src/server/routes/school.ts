@@ -1,54 +1,47 @@
-import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { School, selectSchool } from "@/lib/trpc/models/school"
 import { SchoolDetail, selectSchoolDetail } from "@/lib/trpc/models/schoolDetail"
-import { authenticatedProcedure, publicProcedure, router } from "@/server/trpc"
+import { adminProcedure, publicProcedure, router } from "@/server/trpc"
 
 export const schoolRouter = router({
-    create: authenticatedProcedure
+    createSchool: adminProcedure
         .input(z.object({
             name: z.string()
         }))
         .output(School)
         .mutation(async ({ ctx, input }) => {
-            if (!ctx.user.admin)
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-
-            return ctx.prisma.school.create({
+            return await ctx.prisma.school.create({
                 data: input,
                 select: selectSchool
             })
         }),
-    getAll: publicProcedure
+    getSchools: publicProcedure
         .output(z.array(School))
-        .query(({ ctx }) =>
-            ctx.prisma.school.findMany({
+        .query(async ({ ctx }) => {
+            return await ctx.prisma.school.findMany({
                 select: selectSchool
             })
-        ),
-    get: publicProcedure
+        }),
+    getSchool: publicProcedure
         .input(z.object({
             id: z.string()
         }))
         .output(z.nullable(SchoolDetail))
-        .query(({ ctx, input }) =>
-            ctx.prisma.school.findFirst({
+        .query(async ({ ctx, input }) => {
+            return await ctx.prisma.school.findFirst({
                 where: input,
                 select: selectSchoolDetail
             })
-        ),
-    update: authenticatedProcedure
+        }),
+    updateSchool: adminProcedure
         .input(z.object({
             id: z.string(),
             name: z.string()
         }))
         .output(School)
-        .mutation(({ ctx, input }) => {
-            if (!ctx.user.admin)
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-
-            return ctx.prisma.school.update({
+        .mutation(async ({ ctx, input }) => {
+            return await ctx.prisma.school.update({
                 data: {
                     name: input.name
                 },
@@ -58,30 +51,15 @@ export const schoolRouter = router({
                 select: selectSchool
             })
         }),
-    delete: authenticatedProcedure
+    deleteSchools: adminProcedure
         .input(z.object({
-            id: z.string()
+            ids: z.array(z.string())
         }))
         .mutation(async ({ ctx, input }) => {
-            if (!ctx.user.admin)
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-
-            await ctx.prisma.school.delete({
-                where: input
-            })
-        }),
-    deleteMany: authenticatedProcedure
-        .input(z.object({
-            schoolIds: z.array(z.string())
-        }))
-        .mutation(async ({ ctx, input }) => {
-            if (!ctx.user.admin)
-                throw new TRPCError({ code: "UNAUTHORIZED" })
-
             await ctx.prisma.school.deleteMany({
                 where: {
                     id: {
-                        in: input.schoolIds
+                        in: input.ids
                     }
                 }
             })
