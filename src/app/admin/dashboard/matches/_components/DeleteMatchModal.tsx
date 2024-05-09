@@ -8,7 +8,7 @@ export default function DeleteMatchModal({ isOpen, onClose, matchIds }: ModalPro
 
     return (
         <ActionModal
-            action={ () => deleteManyMatches.mutateAsync({ matchIds }) }
+            action={ () => deleteManyMatches.mutateAsync({ ids: matchIds }) }
             isOpen={ isOpen }
             onClose={ onClose }
             header="Delete Match(es)"

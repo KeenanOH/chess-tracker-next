@@ -15,7 +15,7 @@ type BoardModalProps = {
 
 export default function BoardModal({ isOpen, onClose, board, homePlayers, awayPlayers }: ModalProps & BoardModalProps) {
 
-    const updateBoard = trpc.board.update.useMutation()
+    const updateBoard = trpc.updateBoard.useMutation()
     const [homePlayerId, setHomePlayerId] = useState<string>()
     const [awayPlayerId, setAwayPlayerId] = useState<string>()
     const [result, setResult] = useState<string>()

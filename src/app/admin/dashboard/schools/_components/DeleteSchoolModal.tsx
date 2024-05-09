@@ -8,7 +8,7 @@ export default function DeleteSchoolModal({ isOpen, onClose, schoolIds }: ModalP
 
     return (
         <ActionModal
-            action={ () => deleteSchool.mutateAsync({ schoolIds })}
+            action={ () => deleteSchool.mutateAsync({ ids: schoolIds })}
             isOpen={ isOpen }
             onClose={ onClose }
             header="Delete School(s)"

@@ -7,7 +7,7 @@ import { trpc } from "@/lib/trpc/trpc"
 
 export default function SettingsModal({ isOpen, onClose }: ModalProps) {
 
-    const updateUser = trpc.user.update.useMutation()
+    const updateUser = trpc.updateUser.useMutation()
     const [secretCode, setSecretCode] = useState("")
 
     return (

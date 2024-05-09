@@ -8,7 +8,7 @@ export default function DeletePlayerModal({ isOpen, onClose, playerIds }: ModalP
 
     return (
         <ActionModal
-            action={ () => deleteManyPlayers.mutateAsync({ playerIds })}
+            action={ () => deleteManyPlayers.mutateAsync({ ids: playerIds })}
             isOpen={ isOpen }
             onClose={ onClose }
             header="Delete Player(s)"
